@@ -13,8 +13,8 @@ RUN npm ci --only=production
 # bundle src
 COPY . .
 
-# map 8080
-EXPOSE 8080
+# map port
+EXPOSE 5000 
 
 # start server ($ node server.js)
 CMD ["node", "server/src/index.js"]

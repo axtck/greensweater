@@ -4,7 +4,7 @@ const sweaters = require("./sweaters");
 const router = express.Router();
 
 router.get("/", (req, res) => res.json({
-    message: "API"
+    message: "/api/v1 route for API"
 }));
 
 router.use("/sweaters", sweaters);

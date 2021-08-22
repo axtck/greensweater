@@ -5,7 +5,7 @@ const cors = require("cors");
 const api = require("./api");
 const mongoose = require("mongoose");
 
-require('dotenv').config();
+require("dotenv").config();
 const app = express();
 
 const mdbDatabase = process.env.MONGO_DATABASE;
@@ -18,20 +18,21 @@ const mongoUrl = `mongodb://${mdbUser}:${mdbPassword}@${mdbHost}:${mdbPort}/?aut
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
     console.log("connected");
 });
 
-
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // cors - change when in prod 
+app.use(express.json()); // parse requests of content-type - application/json
 
-app.get("/", (req, res) => res.json({
-    message: "base route for API"
-}));
+app.get("/", (req, res) => {
+    res.json({
+        message: "base route for API"
+    });
+});
 
 app.use("/api/v1", api);
 

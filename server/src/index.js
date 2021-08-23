@@ -32,11 +32,11 @@ db.mongoose
         process.exit();
     });
 
+// create rows in roles collection
 const initial = () => {
     console.log("Connected, running initial");
     Role.estimatedDocumentCount((err, count) => {
         if (!err && count === 0) {
-
             // create user
             new Role({
                 name: "user"
@@ -58,7 +58,6 @@ const initial = () => {
                 name: "admin"
             }).save((err) => {
                 if (err) console.log("error", err);
-
                 console.log("added 'admin' to roles collection");
             });
         }
@@ -72,6 +71,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1", api);
+
+// routes
+require("./routes/auth.routes")(app);
+require("./routes/user.routes")(app);
 
 const port = process.env.PORT || 5000;
 

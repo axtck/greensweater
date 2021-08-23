@@ -6,24 +6,28 @@ require("dotenv").config();
 const User = db.user;
 const Role = db.role;
 
-verifyToken = (req, res, next) => {
-    let token = req.headers["x-access-token"];
+// verify json webtoken
+const verifyToken = (req, res, next) => {
+    const token = req.headers["x-access-token"]; // get token from req headers
 
     if (!token) {
         res.status(403).send({ message: "No token provided" });
         return;
     }
+
+    // verify token
     jwt.verify(token, process.env.JWT_AUTHKEY, (err, decoded) => {
         if (err) {
             res.status(401).send({ message: "Unauthorized" });
             return;
         }
-        req.userId = decoded.id;
+
+        req.userId = decoded.id; // if all good, set user id to decoded id
         next();
     });
 };
 
-isAdmin = (req, res, next) => {
+const isAdmin = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
@@ -55,7 +59,7 @@ isAdmin = (req, res, next) => {
 };
 
 
-isModerator = (req, res, next) => {
+const isModerator = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
             res.status(500).send({ message: err });

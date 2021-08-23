@@ -3,27 +3,27 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const api = require("./api");
-const mongoose = require("mongoose");
+const db = require("./models"); // get the db object
+
+const app = express();
 
 require("dotenv").config();
-const app = express();
 
 app.use(morgan("dev"));
 app.use(helmet());
-app.use(cors()); // cors - change when in prod 
+app.use(cors());
 app.use(express.json()); // parse requests of content-type - application/json
 
-const mdbDatabase = process.env.MONGO_DATABASE;
+// get env vars
 const mdbHost = process.env.MONGO_HOST;
 const mdbPort = process.env.MONGO_PORT;
 const mdbPassword = process.env.MONGO_PASSWORD;
 const mdbUser = process.env.MONGO_USER;
 
-const db = require("./models");
-const Role = db.role;
-
+// setup connection string
 const mongoUrl = `mongodb://${mdbUser}:${mdbPassword}@${mdbHost}:${mdbPort}/?authSource=admin`;
 
+// connect using mongoose 
 db.mongoose
     .connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => initial())
@@ -32,33 +32,34 @@ db.mongoose
         process.exit();
     });
 
+const Role = db.role;
 // create rows in roles collection
 const initial = () => {
     console.log("Connected, running initial");
+    // get estimated doc count
     Role.estimatedDocumentCount((err, count) => {
+        // if no roles in db
         if (!err && count === 0) {
-            // create user
+            // create user role
             new Role({
                 name: "user"
             }).save((err) => {
-                if (err) console.error(err); // should I return?
-                console.log("added 'user' to roles collection");
+                if (err) return console.error(err); // should I return?
+                console.log("Added 'user' to roles collection");
             });
-
-            // create moderator
+            // create moderator role
             new Role({
                 name: "moderator"
             }).save((err) => {
-                if (err) console.error(err);
-                console.log("added 'moderator' to roles collection");
+                if (err) return console.error(err);
+                console.log("Added 'moderator' to roles collection");
             });
-
-            // create admin
+            // create admin role
             new Role({
                 name: "admin"
             }).save((err) => {
-                if (err) console.log("error", err);
-                console.log("added 'admin' to roles collection");
+                if (err) return console.log(err);
+                console.log("Added 'admin' to roles collection");
             });
         }
     });

@@ -1,10 +1,11 @@
 const db = require("../models");
-const User = db.user;
-const Role = db.role;
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+
 require("dotenv").config();
+
+const User = db.user;
+const Role = db.role;
 
 exports.signup = (req, res) => {
     const user = new User({

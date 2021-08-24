@@ -2,8 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
-const api = require("./api");
-const db = require("./models"); // get the db object
+const db = require("./models");
+const routes = require("./routes");
 
 const app = express();
 
@@ -71,12 +71,11 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use("/api/v1", api);
-
-// routes
-require("./routes/auth.routes")(app);
-require("./routes/user.routes")(app);
+app.use("/api/v1", routes);
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Listening (${port})`));
+app.listen(port, (err) => {
+    if (err) return console.error(err);
+    console.log(`Listening (${port})`);
+});

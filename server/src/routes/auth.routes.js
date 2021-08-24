@@ -12,6 +12,8 @@ router.use((req, res, next) => {
     next();
 });
 
+// auth routes
+// sign up
 router.post(
     "/signup",
     [
@@ -21,6 +23,7 @@ router.post(
     controller.signup
 );
 
+// sign in
 router.post(
     "/signin",
     controller.signin

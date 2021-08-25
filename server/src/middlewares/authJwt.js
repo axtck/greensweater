@@ -27,6 +27,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+// check if user is admin
 const isAdmin = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
@@ -44,11 +45,10 @@ const isAdmin = (req, res, next) => {
                     return;
                 }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "admin") {
-                        next();
-                        return;
-                    }
+                // check if admin is included in roles
+                if (roles.map((r) => r.name).includes("admin")) {
+                    next();
+                    return;
                 }
 
                 res.status(403).send({ message: "Require Admin Role!" });
@@ -58,7 +58,7 @@ const isAdmin = (req, res, next) => {
     });
 };
 
-
+// check if user is moderator
 const isModerator = (req, res, next) => {
     User.findById(req.userId).exec((err, user) => {
         if (err) {
@@ -76,11 +76,10 @@ const isModerator = (req, res, next) => {
                     return;
                 }
 
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === "moderator") {
-                        next();
-                        return;
-                    }
+                // check if moderator is included in roles
+                if (roles.map((r) => r.name).includes("moderator")) {
+                    next();
+                    return;
                 }
 
                 res.status(403).send({ message: "Require Moderator Role!" });

@@ -7,20 +7,24 @@ require("dotenv").config();
 const User = db.user;
 const Role = db.role;
 
+// singup
 exports.signup = (req, res) => {
     const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8) // bcrypt
     });
 
+    // save user
     user.save((err, user) => {
         if (err) {
             res.status(500).send({ message: err });
             return;
         }
 
+        // if role(s) is specified in request
         if (req.body.roles) {
+            // find roles
             Role.find(
                 {
                     name: { $in: req.body.roles }
@@ -31,8 +35,8 @@ exports.signup = (req, res) => {
                         return;
                     }
 
-                    user.roles = roles.map(role => role._id);
-                    user.save(err => {
+                    user.roles = roles.map(role => role._id); // assign roles to user
+                    user.save((err) => {
                         if (err) {
                             res.status(500).send({ message: err });
                             return;
@@ -43,14 +47,15 @@ exports.signup = (req, res) => {
                 }
             );
         } else {
+            // if no role(s) is specified
             Role.findOne({ name: "user" }, (err, role) => {
                 if (err) {
                     res.status(500).send({ message: err });
                     return;
                 }
 
-                user.roles = [role._id];
-                user.save(err => {
+                user.roles = [role._id]; // assign user role to user
+                user.save((err) => {
                     if (err) {
                         res.status(500).send({ message: err });
                         return;
@@ -63,7 +68,7 @@ exports.signup = (req, res) => {
     });
 };
 
-
+// signin
 exports.signin = (req, res) => {
     User.findOne({
         username: req.body.username
@@ -76,35 +81,34 @@ exports.signin = (req, res) => {
             }
 
             if (!user) {
-                return res.status(404).send({ message: "User Not found." });
+                res.status(404).send({ message: "User Not found." });
+                return;
             }
 
-            var passwordIsValid = bcrypt.compareSync(
+            // compare passwords using bcrypt
+            const passwordIsValid = bcrypt.compareSync(
                 req.body.password,
                 user.password
             );
 
             if (!passwordIsValid) {
-                return res.status(401).send({
+                res.status(401).send({
                     accessToken: null,
                     message: "Invalid Password!"
                 });
+                return;
             }
 
-            var token = jwt.sign({ id: user.id }, process.env.JWT_AUTHKEY, {
+            // generate token using jsonwebtoken
+            const token = jwt.sign({ id: user.id }, process.env.JWT_AUTHKEY, {
                 expiresIn: 86400 // 24 hours
             });
 
-            var authorities = [];
-
-            for (let i = 0; i < user.roles.length; i++) {
-                authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-            }
             res.status(200).send({
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                roles: authorities,
+                roles: user.roles.map((r) => r.name), // role names
                 accessToken: token
             });
         });

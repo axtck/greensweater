@@ -4,6 +4,7 @@ import GreenSweater from "../pages/GreenSweater";
 import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import SignupPage from "../pages/SignupPage";
+import UserSettings from "../pages/UserSettings";
 
 interface MainRoutesProps { };
 
@@ -13,6 +14,8 @@ const MainRoutes: FunctionComponent<MainRoutesProps> = () => (
 
         {/* main */}
         <Route path="/greensweater" component={GreenSweater} />
+        <Route path="/settings/user/:userName" component={UserSettings} />
+
 
         {/* login / signup */}
         <Route path="/login" component={LoginPage} />

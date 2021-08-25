@@ -15,3 +15,10 @@ interface ITextFieldDef {
     type?: string;
     onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+interface IUserData {
+    email: string;
+    username: string;
+    password: string;
+    roles?: Array<string>;
+}

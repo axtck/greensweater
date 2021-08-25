@@ -42,7 +42,10 @@ exports.signup = (req, res) => {
                             return;
                         }
 
-                        res.send({ message: "User was registered successfully!" });
+                        res.json({
+                            message: "User was registered successfully!",
+                            user
+                        });
                     });
                 }
             );
@@ -61,7 +64,10 @@ exports.signup = (req, res) => {
                         return;
                     }
 
-                    res.send({ message: "User was registered successfully!" });
+                    res.json({
+                        message: "User was registered successfully!",
+                        user
+                    });
                 });
             });
         }

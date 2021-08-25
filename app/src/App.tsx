@@ -18,7 +18,7 @@ const App: FunctionComponent<AppProps> = () => {
             </div>
           </div>
           <div className="col-12 col-md-10">
-            <div className="container">
+            <div className="container mt-2">
               <Content />
             </div>
           </div>

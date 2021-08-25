@@ -12,5 +12,6 @@ interface ITextFieldDef {
     name: string;
     label: string;
     value: string;
+    type?: string;
     onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }

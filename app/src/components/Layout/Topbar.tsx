@@ -11,7 +11,11 @@ const Topbar: FunctionComponent<TopbarProps> = () => {
     const routes: IRouteLink[] = [
         {
             route: "/home",
-            label: "Home",
+            label: "Home"
+        },
+        {
+            route: "/login",
+            label: "Login"
         }
     ];
 
@@ -30,7 +34,7 @@ const Topbar: FunctionComponent<TopbarProps> = () => {
     ***********/
 
     const navLis = routes.map((r, i) => {
-        return <li key={i} className="nav-item">
+        return <li key={i} className="nav-item mx-3">
             <span
                 className="text-white"
                 role="button"

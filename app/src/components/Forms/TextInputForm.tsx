@@ -10,16 +10,18 @@ const TextInputForm: FunctionComponent<TextInputFormProps> = ({ fields }) => (
         {
             fields.map((f, i) => {
                 return (
-                    <TextField
-                        key={i}
-                        value={f.value}
-                        name={f.name}
-                        label={f.label}
-                        margin="normal"
-                        size="small"
-                        variant="outlined"
-                        onChange={f.onInputChange}
-                    />
+                    <div key={i}>
+                        <TextField
+                            value={f.value}
+                            name={f.name}
+                            label={f.label}
+                            margin="normal"
+                            size="small"
+                            variant="outlined"
+                            type={f.type || "text"}
+                            onChange={f.onInputChange}
+                        />
+                    </div>
                 );
             })
         }

@@ -6,7 +6,7 @@ const HomePage: FunctionComponent<HomeProps> = () => {
 
     return (
         <div>
-            <h4 className="mt-2">Home</h4>
+            <h4>Home</h4>
         </div>
     );
 };

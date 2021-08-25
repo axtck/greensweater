@@ -1,5 +1,0 @@
-.env
-/node_modules
-
-/app/greensweater/node_modules
-/server/node_modules

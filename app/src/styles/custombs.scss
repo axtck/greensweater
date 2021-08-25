@@ -1,0 +1,33 @@
+// import custom variables
+@import "./variables";
+
+// required imports
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// set custom colors
+$custom-colors: (
+  "neat": $neat,
+  "react": $react,
+  "soft": $soft,
+);
+
+// for spacing ($spacer = 1rem)
+$custom-spacers: (
+  6: $spacer * 5.5,
+);
+
+// merge maps
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$spacers: map-merge($spacers, $custom-spacers);
+
+// set custom positions
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+    .position#{$infix}-fixed {
+      position: fixed !important;
+    }
+  }
+}

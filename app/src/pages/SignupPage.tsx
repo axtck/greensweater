@@ -1,5 +1,5 @@
-import { Button } from "@material-ui/core";
 import React, { FunctionComponent, MouseEvent, useState } from "react";
+import { Button } from "@material-ui/core";
 import { ChangeEvent } from "react";
 import TextInputForm from "../components/Forms/TextInputForm";
 import api from "../apis/greensweaterAPI";
@@ -31,10 +31,8 @@ const SignupPage: FunctionComponent<SignupPageProps> = () => {
     const handleSignupClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        console.log(userData);
-
         api.post("/auth/signup", userData)
-            .then(({ data }) => history.push(`/settings/user/${data.user.username}`))
+            .then(() => history.push(`/settings/user/${userData.username}`))
             .catch((err) => console.log(err));
     };
 

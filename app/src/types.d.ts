@@ -22,3 +22,8 @@ interface IUserData {
     password: string;
     roles?: Array<string>;
 }
+
+interface IReduxAction {
+    type: string;
+    payload?: string;
+}

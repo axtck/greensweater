@@ -23,7 +23,19 @@ interface IUserData {
     roles?: Array<string>;
 }
 
-interface IReduxAction {
+interface IUserLoginCredentials {
+    username: string;
+    password: string;
+}
+
+interface IRActionString {
     type: string;
     payload?: string;
 }
+
+interface IRActionUser {
+    type: string;
+    payload?: IUserLoginCredentials;
+}
+
+type RAction = IRActionString | IRActionUser;

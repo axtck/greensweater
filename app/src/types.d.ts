@@ -31,20 +31,3 @@ interface IUserLoginCredentials {
 interface IUserSignupCredentials extends IUserLoginCredentials {
     email: string;
 }
-
-interface IRActionString {
-    type: string;
-    payload?: string;
-}
-
-interface IRActionUser {
-    type: string;
-    payload?: IUserLoginCredentials;
-}
-
-type RAction = IRActionString | IRActionUser;
-
-interface IAlertState {
-    type: string;
-    message: string;
-}

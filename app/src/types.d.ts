@@ -30,4 +30,5 @@ interface IUserLoginCredentials {
 
 interface IUserSignupCredentials extends IUserLoginCredentials {
     email: string;
+    // roles: Array<string>;
 }

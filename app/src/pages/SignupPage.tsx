@@ -2,28 +2,31 @@ import React, { FunctionComponent, MouseEvent, useState } from "react";
 import { Button } from "@material-ui/core";
 import { ChangeEvent } from "react";
 import TextInputForm from "../components/Forms/TextInputForm";
-import api from "../apis/greensweaterAPI";
-import { useHistory } from "react-router-dom";
+import { useAppDispatch } from "../app/hooks";
+import { registerUser } from "../redux/userSlice";
 
 interface SignupPageProps { };
 
 const SignupPage: FunctionComponent<SignupPageProps> = () => {
 
-    const initialUserData: IUserData = {
+    const dispatch = useAppDispatch();
+
+    // useEffect(() => {
+    //     dispatch(logoutUser(""));
+    // }, []);
+
+    const initialUserSignupData: IUserSignupCredentials = {
         email: "",
         username: "",
         password: "",
-        roles: ["user"]
     };
 
-    const [userData, setUserData] = useState<IUserData>(initialUserData);
-
-    const history = useHistory();
+    const [userSignupData, setUserSignupData] = useState<IUserSignupCredentials>(initialUserSignupData);
 
     const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setUserData({
-            ...userData,
+        setUserSignupData({
+            ...userSignupData,
             [e.target.name]: e.target.value
         });
     };
@@ -31,27 +34,27 @@ const SignupPage: FunctionComponent<SignupPageProps> = () => {
     const handleSignupClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        api.post("/auth/signup", userData)
-            .then(() => history.push(`/settings/user/${userData.username}`))
-            .catch((err) => console.log(err));
+        if (userSignupData.email && userSignupData.password && userSignupData.username) {
+            dispatch(registerUser(userSignupData));
+        }
     };
 
     const signupFormFields: ITextFieldDef[] = [
         {
             name: "email",
             label: "email",
-            value: userData.email,
+            value: userSignupData.email,
             onInputChange: handleUserDataChange
         },
         {
             name: "username",
             label: "Username",
-            value: userData.username,
+            value: userSignupData.username,
             onInputChange: handleUserDataChange
         }, {
             name: "password",
             label: "Password",
-            value: userData.password,
+            value: userSignupData.password,
             onInputChange: handleUserDataChange,
             type: "password"
         }

@@ -1,10 +1,11 @@
 import { authHeader } from "../helpers/authHeader";
 import api from "../apis/greensweaterAPI";
 
-const signup = (user: IUserLoginCredentials) => {
+const signup = (user: IUserSignupCredentials) => {
     return api.post("/auth/signup", user);
 };
 
+// might be converted to async
 const login = (user: IUserLoginCredentials) => {
     return api.post("/auth/signin", user)
         .then((user) => {

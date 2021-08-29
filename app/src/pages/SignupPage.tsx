@@ -3,17 +3,13 @@ import { Button } from "@material-ui/core";
 import { ChangeEvent } from "react";
 import TextInputForm from "../components/Forms/TextInputForm";
 import { useAppDispatch } from "../app/hooks";
-import { registerUser } from "../redux/userSlice";
+import { signupUserAsync } from "../redux/userSlice";
 
 interface SignupPageProps { };
 
 const SignupPage: FunctionComponent<SignupPageProps> = () => {
 
     const dispatch = useAppDispatch();
-
-    // useEffect(() => {
-    //     dispatch(logoutUser(""));
-    // }, []);
 
     const initialUserSignupData: IUserSignupCredentials = {
         email: "",
@@ -35,7 +31,7 @@ const SignupPage: FunctionComponent<SignupPageProps> = () => {
         e.preventDefault();
 
         if (userSignupData.email && userSignupData.password && userSignupData.username) {
-            dispatch(registerUser(userSignupData));
+            dispatch(signupUserAsync(userSignupData));
         }
     };
 

@@ -1,9 +1,9 @@
-export const authHeader = () => {
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
+import axios from "axios";
 
-    if (user && user.token) {
-        return { "Authorization": "Bearer" + user.token };
+export const setAuthToken = (token: string) => {
+    if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+        delete axios.defaults.headers.common["Authorizatoin"];
     }
-
-    return {};
 };

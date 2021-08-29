@@ -32,3 +32,11 @@ interface IUserSignupCredentials extends IUserLoginCredentials {
     email: string;
     // roles: Array<string>;
 }
+
+interface IUserLoginResponse {
+    id: string;
+    username: string;
+    email: string;
+    roles: Array<string>;
+    accessToken: string;
+}

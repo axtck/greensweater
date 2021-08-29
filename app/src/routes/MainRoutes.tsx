@@ -2,7 +2,7 @@ import React, { FunctionComponent } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import GreenSweater from "../pages/GreenSweater";
 import HomePage from "../pages/HomePage";
-import LoginPage from "../pages/LoginPage";
+import SigninPage from "../pages/SigninPage";
 import SignupPage from "../pages/SignupPage";
 import UserSettingsPage from "../pages/UserSettingsPage";
 
@@ -18,7 +18,7 @@ const MainRoutes: FunctionComponent<MainRoutesProps> = () => (
 
 
         {/* login / signup */}
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" component={SigninPage} />
         <Route path="/signup" component={SignupPage} />
 
         {/* other routes */}

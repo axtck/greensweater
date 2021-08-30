@@ -8,43 +8,33 @@ export interface IUserState {
         username: string;
         email: string;
         password?: string;
-    };
+        accessToken: string;
+    } | null;
     status: "idle" | "loading" | "failed";
-    logedIn: boolean;
+    loggedIn: boolean;
 }
 
 const initialState: IUserState = {
     user: {
         username: "",
         email: "",
-        password: ""
+        password: "",
+        accessToken: ""
     },
     status: "idle",
-    logedIn: false
+    loggedIn: false,
 };
 
 export const signinUserAsync = createAsyncThunk(
     "user/signinUser",
     async (user: IUserLoginCredentials) => {
-        try {
-            const response = await api
-                .post<IUserLoginResponse>("/auth/signin", user);
-            if (response.status === 200) {
-                localStorage.setItem("jwtToken", response.data.accessToken);
-                // not sure
-                setAuthToken(response.data.accessToken);
-                // return what you need to action payload from fullfilled
-                return response.data;
-            } else {
-                // reject
-                return response.status.toString();
-            }
-        }
-        catch (e) {
-            console.log(e);
-            // reject
-            return e.response;
-        }
+        const response = await api
+            .post<IUserLoginResponse>("/auth/signin", user);
+
+        localStorage.setItem("jwtToken", response.data.accessToken);
+        setAuthToken(response.data.accessToken);
+
+        return response.data;
     }
 );
 
@@ -65,10 +55,12 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         loginUser: (state, action: PayloadAction<string>) => {
-            state.logedIn = true;
+            state.loggedIn = true;
         },
         logoutUser: (state, action: PayloadAction<string>) => {
-            state.logedIn = false;
+            state.loggedIn = false;
+            state.user = null;
+            state.status = "idle";
         },
     },
     extraReducers: (builder) => {
@@ -78,12 +70,12 @@ export const userSlice = createSlice({
             })
             .addCase(signinUserAsync.fulfilled, (state, action) => {
                 state.status = "idle";
-                state.logedIn = true;
+                state.loggedIn = true;
                 state.user = action.payload;
             })
             .addCase(signinUserAsync.rejected, (state, action) => {
                 state.status = "failed";
-                state.logedIn = false;
+                state.loggedIn = false;
                 state.user = initialState.user;
             })
             .addCase(signupUserAsync.pending, (state) => {
@@ -91,13 +83,13 @@ export const userSlice = createSlice({
             })
             .addCase(signupUserAsync.fulfilled, (state, action) => {
                 state.status = "idle";
-                state.logedIn = true;
+                state.loggedIn = true;
                 state.user = action.payload;
             })
             .addCase(signupUserAsync.rejected, (state, action) => {
                 state.status = "failed";
-                state.logedIn = false;
-            });;
+                state.loggedIn = false;
+            });
     }
 });
 

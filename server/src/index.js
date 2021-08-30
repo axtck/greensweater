@@ -68,7 +68,7 @@ const initial = () => {
 
 app.get("/", (req, res) => {
     res.json({
-        message: "base route for API"
+        users: ["john", "mary", "sophie"]
     });
 });
 

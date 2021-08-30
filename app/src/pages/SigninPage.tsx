@@ -1,8 +1,11 @@
 import { Button } from "@material-ui/core";
 import React, { ChangeEvent, FunctionComponent, MouseEvent, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
 import TextInputForm from "../components/Forms/TextInputForm";
+import { openSnackbarError, openSnackbarSuccess } from "../redux/alertSlice";
 import { signinUserAsync } from "../redux/userSlice";
 
 interface SigninPageProps { };
@@ -10,6 +13,8 @@ interface SigninPageProps { };
 const SigninPage: FunctionComponent<SigninPageProps> = () => {
 
     const dispatch = useDispatch();
+
+    const user = useAppSelector((state) => state.user);
 
     const initialUserSigninData: IUserLoginCredentials = {
         username: "",
@@ -19,6 +24,15 @@ const SigninPage: FunctionComponent<SigninPageProps> = () => {
     const [userSigninData, setUserSigninData] = useState<IUserLoginCredentials>(initialUserSigninData);
 
     const history = useHistory();
+
+    useEffect(() => {
+        if (user.status === "failed") {
+            dispatch(openSnackbarError("Login failed"));
+        } else if (user.status === "idle") {
+            dispatch(openSnackbarSuccess("Loged in successfully!"));
+        }
+    }, [user.status, dispatch]);
+
 
     const handleSignupClick = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -37,6 +51,7 @@ const SigninPage: FunctionComponent<SigninPageProps> = () => {
         e.preventDefault();
         if (userSigninData.username && userSigninData.password) {
             dispatch(signinUserAsync(userSigninData));
+            // if (user.loggedIn) history.push(`/settings/user/${user.user.username}`);
         }
     };
 

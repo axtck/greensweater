@@ -2,14 +2,19 @@ import React, { FunctionComponent, MouseEvent, useState } from "react";
 import { Button } from "@material-ui/core";
 import { ChangeEvent } from "react";
 import TextInputForm from "../components/Forms/TextInputForm";
-import { useAppDispatch } from "../app/hooks";
-import { signupUserAsync } from "../redux/userSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { signupUserAsync } from "../redux/userSignupSlice";
+import { useEffect } from "react";
+import { openSnackbarSuccess } from "../redux/alertSlice";
+import { useHistory } from "react-router-dom";
 
 interface SignupPageProps { };
 
 const SignupPage: FunctionComponent<SignupPageProps> = () => {
 
     const dispatch = useAppDispatch();
+
+    const user = useAppSelector((state) => state.signupUser);
 
     const initialUserSignupData: IUserSignupCredentials = {
         email: "",
@@ -18,6 +23,16 @@ const SignupPage: FunctionComponent<SignupPageProps> = () => {
     };
 
     const [userSignupData, setUserSignupData] = useState<IUserSignupCredentials>(initialUserSignupData);
+
+    const history = useHistory();
+
+    useEffect(() => {
+        if (user.done) {
+            dispatch(openSnackbarSuccess(`Successfully signed ${user.user?.username} up`));
+            history.push("login");
+        }
+    }, [dispatch, user.done, history, user.user?.username]);
+
 
     const handleUserDataChange = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();

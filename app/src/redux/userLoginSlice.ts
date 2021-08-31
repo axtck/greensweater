@@ -1,13 +1,10 @@
-import { createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import api from "../apis/greensweaterAPI";
-import { setAuthToken } from '../helpers/authHeader';
 
 export interface IUserState {
     user: {
         username: string;
-        email: string;
-        password?: string;
         accessToken: string;
     } | null;
     status: "idle" | "loading" | "failed";
@@ -15,12 +12,7 @@ export interface IUserState {
 }
 
 const initialState: IUserState = {
-    user: {
-        username: "",
-        email: "",
-        password: "",
-        accessToken: ""
-    },
+    user: null,
     status: "idle",
     loggedIn: false,
 };
@@ -31,21 +23,6 @@ export const signinUserAsync = createAsyncThunk(
         const response = await api
             .post<IUserLoginResponse>("/auth/signin", user);
 
-        localStorage.setItem("jwtToken", response.data.accessToken);
-        setAuthToken(response.data.accessToken);
-
-        return response.data;
-    }
-);
-
-export const signupUserAsync = createAsyncThunk(
-    "user/signupUser",
-    async (user: IUserSignupCredentials) => {
-        const response = await api.post("/auth/signup", {
-            ...user,
-            roles: ["user"]
-        });
-
         return response.data;
     }
 );
@@ -54,19 +31,22 @@ export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        loginUser: (state, action: PayloadAction<string>) => {
-            state.loggedIn = true;
-        },
-        logoutUser: (state, action: PayloadAction<string>) => {
+        logoutUser: (state) => {
             state.loggedIn = false;
             state.user = null;
             state.status = "idle";
         },
+        clearState: (state) => {
+            state.user = null;
+            state.status = "idle";
+            state.loggedIn = false;
+        }
     },
     extraReducers: (builder) => {
         builder
             .addCase(signinUserAsync.pending, (state) => {
                 state.status = "loading";
+                state.user = null;
             })
             .addCase(signinUserAsync.fulfilled, (state, action) => {
                 state.status = "idle";
@@ -76,26 +56,14 @@ export const userSlice = createSlice({
             .addCase(signinUserAsync.rejected, (state, action) => {
                 state.status = "failed";
                 state.loggedIn = false;
-                state.user = initialState.user;
-            })
-            .addCase(signupUserAsync.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(signupUserAsync.fulfilled, (state, action) => {
-                state.status = "idle";
-                state.loggedIn = true;
-                state.user = action.payload;
-            })
-            .addCase(signupUserAsync.rejected, (state, action) => {
-                state.status = "failed";
-                state.loggedIn = false;
+                state.user = null;
             });
     }
 });
 
 export const {
-    loginUser,
-    logoutUser
+    logoutUser,
+    clearState
 } = userSlice.actions;
 
 export default userSlice.reducer;

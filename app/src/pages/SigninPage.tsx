@@ -6,7 +6,7 @@ import { useHistory } from "react-router-dom";
 import { useAppSelector } from "../app/hooks";
 import TextInputForm from "../components/Forms/TextInputForm";
 import { openSnackbarError, openSnackbarSuccess } from "../redux/alertSlice";
-import { signinUserAsync } from "../redux/userSlice";
+import { signinUserAsync } from "../redux/userLoginSlice";
 
 interface SigninPageProps { };
 
@@ -14,7 +14,7 @@ const SigninPage: FunctionComponent<SigninPageProps> = () => {
 
     const dispatch = useDispatch();
 
-    const user = useAppSelector((state) => state.user);
+    const user = useAppSelector((state) => state.loginUser);
 
     const initialUserSigninData: IUserLoginCredentials = {
         username: "",

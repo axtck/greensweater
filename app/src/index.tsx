@@ -11,10 +11,9 @@ import api from "./apis/greensweaterAPI";
 
 
 api.interceptors.request.use((request: AxiosRequestConfig) => {
-  // example on urls to only show when authorized
-  // if(request.url?.includes("checkout") || request.url?.includes("billing"))
-
-  request.headers["x-access-token"] = store.getState().user.user?.accessToken;
+  if (request.url?.includes("users")) {
+    request.headers["x-access-token"] = store.getState().loginUser.user?.accessToken;
+  }
   return request;
 }, (error) => {
   return Promise.reject(error);

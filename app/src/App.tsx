@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "./app/hooks";
 import SidebarLeft from "./components/Layout/SidebarLeft";
 import Topbar from "./components/Layout/Topbar";
 import { openSnackbarInfo } from "./redux/alertSlice";
-import { logoutUser } from "./redux/userSlice";
+import { logoutUser } from "./redux/userLoginSlice";
 import Content from "./routes/MainRoutes";
 
 interface AppProps { };
@@ -13,17 +13,17 @@ const App: FunctionComponent<AppProps> = () => {
 
   const dispatch = useAppDispatch();
 
-  const user = useAppSelector((state) => state.user);
+  const login = useAppSelector((state) => state.loginUser);
 
   const history = useHistory();
 
   const handleLogoutClick = (e: MouseEvent<HTMLLinkElement>) => {
     e.preventDefault();
 
-    if (user.loggedIn) {
+    if (login.loggedIn) {
       history.push("/home");
-      dispatch(logoutUser(""));
-      dispatch(openSnackbarInfo(`Successfully logged ${user.user?.username} out`));
+      dispatch(logoutUser());
+      dispatch(openSnackbarInfo(`Successfully logged ${login.user?.username} out`));
     } else {
       history.push("/login");
     }
@@ -32,7 +32,7 @@ const App: FunctionComponent<AppProps> = () => {
 
   return (
     <React.Fragment>
-      <Topbar onLoginLogoutClick={handleLogoutClick} isLoggedIn={user.loggedIn} />
+      <Topbar onLoginLogoutClick={handleLogoutClick} isLoggedIn={login.loggedIn} />
       <div className="container mt-6">
         <div className="row justify-content-between">
           <div className="col-12 col-md-2">

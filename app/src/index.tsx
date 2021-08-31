@@ -6,9 +6,11 @@ import App from './App';
 import { store } from "./app/store";
 import CustomSnackbar from './components/Alerts/CustomSnackbar';
 import "./styles/Main.scss";
-import axios, { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios";
+import api from "./apis/greensweaterAPI";
 
-axios.interceptors.request.use((request: AxiosRequestConfig) => {
+
+api.interceptors.request.use((request: AxiosRequestConfig) => {
   // example on urls to only show when authorized
   // if(request.url?.includes("checkout") || request.url?.includes("billing"))
 

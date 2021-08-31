@@ -53,7 +53,6 @@ const SigninPage: FunctionComponent<SigninPageProps> = () => {
         e.preventDefault();
         if (userSigninData.username && userSigninData.password) {
             dispatch(signinUserAsync(userSigninData));
-            // if (user.loggedIn) history.push(`/settings/user/${user.user.username}`);
         }
     };
 

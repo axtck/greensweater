@@ -26,12 +26,14 @@ const SigninPage: FunctionComponent<SigninPageProps> = () => {
     const history = useHistory();
 
     useEffect(() => {
-        if (user.status === "failed") {
-            dispatch(openSnackbarError("Login failed"));
-        } else if (user.status === "idle") {
-            dispatch(openSnackbarSuccess("Loged in successfully!"));
+        if (user.loggedIn) {
+            dispatch(openSnackbarSuccess(`Succesfully logged ${user.user?.username} in`));
+            history.push("/greensweater");
         }
-    }, [user.status, dispatch]);
+        else if (user.status === "failed") {
+            dispatch(openSnackbarError("Login failed"));
+        }
+    }, [user.loggedIn, user.status, dispatch, history, user.user?.username]);
 
 
     const handleSignupClick = (e: MouseEvent<HTMLButtonElement>) => {

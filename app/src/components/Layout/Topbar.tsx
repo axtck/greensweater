@@ -1,16 +1,12 @@
 import React, { FunctionComponent, MouseEvent } from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { useAppSelector } from "../../app/hooks";
-import { logoutUser } from "../../redux/userSlice";
 
-interface TopbarProps { };
+interface TopbarProps {
+    isLoggedIn: boolean;
+    onLoginLogoutClick: (e: MouseEvent<HTMLLinkElement>) => void;
+};
 
-const Topbar: FunctionComponent<TopbarProps> = () => {
-
-    const dispatch = useDispatch();
-
-    const loggedIn = useAppSelector((state) => state.user.loggedIn);
+const Topbar: FunctionComponent<TopbarProps> = ({ isLoggedIn, onLoginLogoutClick }) => {
 
     const history = useHistory();
 
@@ -19,10 +15,6 @@ const Topbar: FunctionComponent<TopbarProps> = () => {
         {
             route: "/home",
             label: "Home"
-        },
-        {
-            route: "/login",
-            label: "Login"
         }
     ];
 
@@ -62,17 +54,14 @@ const Topbar: FunctionComponent<TopbarProps> = () => {
                 </h3>
                 <ul className="navbar-nav">
                     {navLis}
-                    {loggedIn && <li className="nav-item mx-3">
+                    <li className="nav-item mx-3">
                         <span
                             className="text-white"
                             role="button"
-                            onClick={(e) => {
-                                handleLinkClick(e, "/home");
-                                dispatch(logoutUser(""));
-                            }}>
-                            Logout
+                            onClick={onLoginLogoutClick}>
+                            {isLoggedIn ? "Logout" : "Login"}
                         </span>
-                    </li>}
+                    </li>
                 </ul>
             </div>
         </nav>

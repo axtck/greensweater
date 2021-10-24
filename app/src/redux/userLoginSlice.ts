@@ -17,11 +17,11 @@ const initialState: IUserState = {
     loggedIn: false,
 };
 
-export const signinUserAsync = createAsyncThunk(
-    "user/signinUser",
+export const loginUserAsync = createAsyncThunk(
+    "user/loginUser",
     async (user: IUserLoginCredentials) => {
         const response = await api
-            .post<IUserLoginResponse>("/auth/signin", user);
+            .post<IUserLoginResponse>("/auth/login", user);
 
         return response.data;
     }
@@ -44,16 +44,16 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(signinUserAsync.pending, (state) => {
+            .addCase(loginUserAsync.pending, (state) => {
                 state.status = "loading";
                 state.user = null;
             })
-            .addCase(signinUserAsync.fulfilled, (state, action) => {
+            .addCase(loginUserAsync.fulfilled, (state, action) => {
                 state.status = "idle";
                 state.loggedIn = true;
                 state.user = action.payload;
             })
-            .addCase(signinUserAsync.rejected, (state, action) => {
+            .addCase(loginUserAsync.rejected, (state, action) => {
                 state.status = "failed";
                 state.loggedIn = false;
                 state.user = null;

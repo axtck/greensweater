@@ -29,7 +29,7 @@ const SignupPage: FunctionComponent<SignupPageProps> = () => {
     useEffect(() => {
         if (user.done) {
             dispatch(openSnackbarSuccess(`Successfully signed ${user.user?.username} up`));
-            history.push("login");
+            history.push("/login");
         }
     }, [dispatch, user.done, history, user.user?.username]);
 
